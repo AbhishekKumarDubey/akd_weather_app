@@ -47,7 +47,6 @@ app.get('/help', (req, res) => {
 });
 
 app.get('/posts', (req, res) => {
-    console.log(JSON.stringify(req.query));
     if (!req.query.id) {
         return res.send({ error: 'You must provide id to search' })
     }
@@ -57,12 +56,21 @@ app.get('/posts', (req, res) => {
         json: true,
         insecure: true,
         rejectUnauthorized: false
-    }, (error, response, body) => {
+    }, (error, { body }) => {
         if (error) {
             return res.send({ error })
         }
         res.send({ data: body[0].body })
     });
+});
+
+app.get('*', (req, res) => {
+    res.render('404', {
+        title: '404',
+        name: 'Abhishek Kumar Dubey',
+        role: 'Developer',
+        errorMsg: 'The page cannot be found!!!'
+    })
 });
 
 app.listen(port, () => {
